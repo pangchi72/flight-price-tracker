@@ -132,7 +132,12 @@ def fetch_google_flights(route: dict, currency: str) -> list[dict]:
         currency=currency,
     )
     result = get_flights(query)
-    items = _get(result, "flights", default=result)
+    if os.environ.get("TRACKER_DEBUG"):
+        print(f"[debug] result type={type(result).__name__} len={len(result) if hasattr(result, '__len__') else '?'}")
+        print(f"[debug] result attrs={[a for a in dir(result) if not a.startswith('_')][:40]}")
+        seq = result if isinstance(result, (list, tuple)) else _get(result, "flights", default=[]) or []
+        for i, it in enumerate(list(seq)[:4]):
+            print(f"[debug] item{i}: {repr(it)[:1500]}")
     # 多段查詢時，有些版本回傳「每段一組結果」的 list，取第一段（價格為整趟總價）
     if isinstance(items, (list, tuple)) and items and _get(items[0], "price") is None \
             and _get(items[0], "flights") is not None:

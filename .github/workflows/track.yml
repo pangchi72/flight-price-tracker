@@ -45,6 +45,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           MODE: ${{ github.event.inputs.mode || 'track' }}
+          TRACKER_DEBUG: "1"
         run: |
           if [ "$MODE" = "test" ]; then
             python tracker.py --test-notify
