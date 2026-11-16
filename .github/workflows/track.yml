@@ -44,6 +44,7 @@ jobs:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
           MODE: ${{ github.event.inputs.mode || 'track' }}
           TRACKER_DEBUG: ""   # 改成 "1" 可以在執行紀錄裡看到 Google 回傳的原始資料
         run: |

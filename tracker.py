@@ -241,6 +241,7 @@ def _post_json(url: str, payload: dict) -> None:
 def channels() -> dict:
     topic = os.environ.get("NTFY_TOPIC") or ""
     return {
+        "serpapi": bool(os.environ.get("SERPAPI_KEY")),
         "ntfy": bool(topic),
         "ntfy_topic_hint": (topic[:6] + "••••") if topic else "",
         "telegram": bool(os.environ.get("TELEGRAM_BOT_TOKEN") and os.environ.get("TELEGRAM_CHAT_ID")),
@@ -291,6 +292,71 @@ def google_flights_url(route: dict) -> str:
     else:
         q = f"Flights from {route['from']} to {route['to']} on {route['date']} one way"
     return "https://www.google.com/travel/flights?q=" + urllib.parse.quote(q)
+
+
+
+# ---------------------------------------------------------------------------
+# Google 價格分析（透過 SerpApi，每條航線每天最多查 1 次）
+# ---------------------------------------------------------------------------
+
+def fetch_insights(route: dict, currency: str) -> dict | None:
+    key = os.environ.get("SERPAPI_KEY")
+    if not key:
+        return None
+    round_trip = route.get("trip") == "round-trip" and route.get("return_date")
+    params = {
+        "engine": "google_flights", "departure_id": route["from"], "arrival_id": route["to"],
+        "outbound_date": route["date"], "type": "1" if round_trip else "2",
+        "currency": currency, "hl": "en", "gl": "tw", "adults": str(route.get("adults", 1)),
+        "api_key": key,
+    }
+    if round_trip:
+        params["return_date"] = route["return_date"]
+    if route.get("max_stops") == 0:
+        params["stops"] = "1"
+    url = "https://serpapi.com/search.json?" + urllib.parse.urlencode(params)
+    with urllib.request.urlopen(url, timeout=60) as resp:
+        data = json.loads(resp.read().decode("utf-8"))
+    if data.get("error"):
+        raise RuntimeError(data["error"])
+    pi = data.get("price_insights") or {}
+    hist = []
+    for item in pi.get("price_history") or []:
+        if isinstance(item, (list, tuple)) and len(item) >= 2 and item[1] is not None:
+            ts = float(item[0])
+            ts = ts / 1000 if ts > 1e12 else ts
+            hist.append({"t": datetime.fromtimestamp(ts, TAIPEI).isoformat(timespec="minutes"),
+                         "price": int(item[1])})
+    rng = pi.get("typical_price_range")
+    if isinstance(rng, dict):
+        rng = [rng.get("low_price"), rng.get("high_price")]
+    return {
+        "fetched_at": datetime.now(TAIPEI).isoformat(timespec="minutes"),
+        "price_level": pi.get("price_level"),
+        "typical_price_range": rng if rng and all(v is not None for v in rng) else None,
+        "lowest_price": pi.get("lowest_price"),
+        "price_history": sorted(hist, key=lambda x: x["t"]),
+    }
+
+
+def maybe_update_insights(route: dict, rh: dict, currency: str, today: date) -> None:
+    old = rh.get("insights") or {}
+    if old.get("fetched_at", "")[:10] == today.isoformat():
+        return
+    try:
+        new = fetch_insights(route, currency)
+    except Exception as e:  # noqa: BLE001
+        print(f"[{route['id']}] Google 價格分析抓取失敗：{e}", file=sys.stderr)
+        return
+    if not new:
+        return
+    # 合併新舊歷史，避免 Google 只回傳最近一段時就把舊的蓋掉
+    merged = {h["t"]: h for h in old.get("price_history", [])}
+    merged.update({h["t"]: h for h in new["price_history"]})
+    new["price_history"] = sorted(merged.values(), key=lambda x: x["t"])
+    rh["insights"] = new
+    print(f"[{route['id']}] Google 價格分析：水準 {new['price_level']}，一般區間 {new['typical_price_range']}，"
+          f"歷史 {len(new['price_history'])} 筆")
 
 
 def page_url(route_id: str | None = None) -> str | None:
@@ -407,6 +473,8 @@ def run(args) -> int:
             "count": len(flights),
         })
         rh["latest"] = flights[:TOP_N]
+        if not args.mock:
+            maybe_update_insights(route, rh, currency, today)
         print(f"[{rid}] 最低 {best['price']:,} {currency}（{best['airline']} {best['dep']}），"
               f"共 {len(flights)} 筆")
 

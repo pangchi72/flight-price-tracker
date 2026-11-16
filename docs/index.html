@@ -66,6 +66,10 @@
   .chart { position: relative; }
   .chart svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
   .axis { fill: var(--muted); font-size: 10px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; padding: 0 4px; font-size: 12px; color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+  .legend i.band { height: 10px; background: var(--good); opacity: .25; }
   .tip { position: absolute; pointer-events: none; background: var(--text); color: var(--bg); font-size: 12px; padding: 6px 9px; border-radius: 8px; white-space: nowrap; transform: translate(-50%, -118%); display: none; }
   .fl { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--line); gap: 10px; }
   .fl:last-child { border-bottom: 0; }
@@ -240,6 +244,8 @@ function routeCard(r) {
   else if (r.active === false) badge = '<span class="badge b-mute">已暫停</span>';
   else if (r.error_streak >= 3) badge = '<span class="badge b-bad">抓取失敗</span>';
   else if (isLow) badge = '<span class="badge b-good">歷史新低</span>';
+  else if (r.insights && r.insights.price_level === "low") badge = '<span class="badge b-good">Google：偏低</span>';
+  else if (r.insights && r.insights.price_level === "high") badge = '<span class="badge b-bad">Google：偏高</span>';
   const change = !r.prev ? '<span class="sub">第一筆資料</span>'
     : diff === 0 ? '<span class="sub">與上次持平</span>'
     : `<span style="font-size:13px;font-weight:600" class="${diff < 0 ? "good" : "bad"}">${diff < 0 ? "▼" : "▲"} ${fmt(Math.abs(diff))}・比上次 ${diff < 0 ? "−" : "+"}${(Math.abs(diff) / r.prev.min * 100).toFixed(1)}%</span>`;
@@ -290,7 +296,11 @@ function viewRoute(id) {
   if (!pts.length) return html + `<div class="card empty">還沒有價格資料，等下一次排程。</div></main>`;
   const all = pts.map((p) => p.min), avg = all.reduce((a, b) => a + b, 0) / all.length;
   const hi = Math.max(...all), cur = r.last.min, rel = (cur - avg) / avg * 100;
-  const level = pts.length < 3 ? ["資料不足", "", "再累積幾筆就能比較"] : rel <= -5 ? ["偏低", "good", `比追蹤期間平均低 ${Math.abs(rel).toFixed(0)}%`] : rel >= 5 ? ["偏高", "bad", `比追蹤期間平均高 ${rel.toFixed(0)}%`] : ["一般", "", `和追蹤期間平均差 ${Math.abs(rel).toFixed(0)}% 以內`];
+  const ins = r.insights || {};
+  const rngTxt = ins.typical_price_range ? `一般區間 ${fmt(ins.typical_price_range[0])}–${fmt(ins.typical_price_range[1])}` : "";
+  const G = { low: ["偏低", "good"], typical: ["一般", ""], high: ["偏高", "bad"] }[ins.price_level];
+  const level = G ? [G[0], G[1], "Google 判斷" + (rngTxt ? "・" + rngTxt : "")]
+    : pts.length < 3 ? ["資料不足", "", "再累積幾筆就能比較"] : rel <= -5 ? ["偏低", "good", `比追蹤期間平均低 ${Math.abs(rel).toFixed(0)}%`] : rel >= 5 ? ["偏高", "bad", `比追蹤期間平均高 ${rel.toFixed(0)}%`] : ["一般", "", `和追蹤期間平均差 ${Math.abs(rel).toFixed(0)}% 以內`];
   const diff = r.prev ? cur - r.prev.min : 0;
   const lowPt = pts.reduce((a, b) => (b.min < a.min ? b : a)), hiPt = pts.reduce((a, b) => (b.min > a.min ? b : a));
   html += `<section class="card stats">
@@ -303,7 +313,8 @@ function viewRoute(id) {
   html += `<section class="card" style="padding:16px 12px 12px;display:flex;flex-direction:column;gap:10px">
     <div style="display:flex;justify-content:space-between;align-items:center;padding:0 4px;gap:8px"><h2 style="margin:0;font-size:15px">最低價走勢</h2>
     <div class="seg" role="group" aria-label="時間範圍" id="ranges">${rb("7d", "7 天")}${rb("30d", "30 天")}${rb("all", "全部")}</div></div>
-    <div class="chart" id="chart"></div></section>`;
+    <div class="chart" id="chart"></div>
+    <div class="legend" aria-hidden="true"><span><i style="background:var(--accent)"></i>本程式查到</span>${(ins.price_history || []).length ? '<span><i style="background:var(--muted)"></i>Google 歷史價格</span>' : ""}${ins.typical_price_range ? '<span><i class="band"></i>一般價格區間</span>' : ""}${r.target_price ? '<span><i style="background:var(--good)"></i>目標價</span>' : ""}</div></section>`;
   const fl = (r.latest || []).map((f) => `<div class="fl"><div style="display:flex;flex-direction:column;min-width:0"><span style="font-weight:600;font-size:14px">${esc(f.airline)}${f.flight_no ? ` <span class="sub">${esc(f.flight_no)}</span>` : ""}</span><span class="sub" style="font-size:12px">${esc(f.dep.slice(-5))} → ${esc(f.arr.slice(-5))}・${f.stops === 0 ? "直飛" : f.stops != null ? f.stops + " 次轉機" : ""}</span></div><b>${fmt(f.price)}</b></div>`).join("");
   html += `<section class="card" style="padding:14px 16px"><h2 style="margin:0 0 4px;font-size:15px">目前查到的航班</h2>${fl || '<div class="sub">沒有資料</div>'}<div class="sub" style="font-size:12px;margin-top:6px">更新於 ${when(r.last.t)}</div></section>`;
   html += `</main><div class="sticky"><a class="btn" href="${esc(r.google_url)}" target="_blank" rel="noopener">到 Google Flights 訂票 ${I.ext}</a></div>`;
@@ -314,8 +325,11 @@ function afterRoute(id) {
   if (!r || !r.pts.length) return;
   const draw = () => {
     const cut = range === "7d" ? 7 : range === "30d" ? 30 : 0;
-    const pts = cut ? r.pts.filter((p) => Date.now() - new Date(p.t) <= cut * 86400e3) : r.pts;
-    drawChart(pts.length ? pts : r.pts.slice(-1), r.target_price);
+    const keep = (p) => !cut || Date.now() - new Date(p.t) <= cut * 86400e3;
+    const pts = r.pts.filter(keep);
+    const ins = r.insights || {};
+    const gh = (ins.price_history || []).map((h) => ({ t: h.t, min: h.price, airline: "Google 歷史價格", g: true })).filter(keep);
+    drawChart(pts.length ? pts : r.pts.slice(-1), r.target_price, gh, ins.typical_price_range);
   };
   $("#ranges").onclick = (e) => {
     const k = e.target.closest("button")?.dataset.range; if (!k) return;
@@ -324,24 +338,33 @@ function afterRoute(id) {
   draw();
 }
 function niceStep(raw) { const p = Math.pow(10, Math.floor(Math.log10(raw))); const n = raw / p; return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * p; }
-function drawChart(pts, target) {
+function drawChart(pts, target, gpts = [], band = null) {
   const box = $("#chart");
   const W = Math.max(280, Math.round(box.clientWidth || 340)), Hh = 200, L = 46, R = 10, T = 14, B = 24;
-  const t0 = new Date(pts[0].t).getTime(), t1 = new Date(pts[pts.length - 1].t).getTime();
+  const allPts = pts.concat(gpts);
+  const times = allPts.map((p) => new Date(p.t).getTime());
+  const t0 = Math.min(...times), t1 = Math.max(...times);
   const span = Math.max(t1 - t0, 3600e3);
-  const vals = pts.map((p) => p.min).concat(target ? [target] : []);
+  const vals = allPts.map((p) => p.min).concat(target ? [target] : [], band || []);
   let lo = Math.min(...vals), hi = Math.max(...vals);
   const pad = Math.max((hi - lo) * 0.15, hi * 0.03, 100);
   lo = Math.max(0, lo - pad); hi += pad;
   const step = niceStep((hi - lo) / 3);
   lo = Math.floor(lo / step) * step; hi = Math.ceil(hi / step) * step;
-  const x = (t) => L + (pts.length === 1 ? (W - L - R) / 2 : ((new Date(t).getTime() - t0) / span) * (W - L - R));
+  const x = (t) => L + (allPts.length === 1 ? (W - L - R) / 2 : ((new Date(t).getTime() - t0) / span) * (W - L - R));
   const y = (v) => T + (1 - (v - lo) / (hi - lo)) * (Hh - T - B);
   let s = `<svg viewBox="0 0 ${W} ${Hh}" width="${W}" height="${Hh}" role="img" aria-label="最低價走勢圖">`;
   for (let v = lo; v <= hi + 1e-6; v += step) s += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text class="axis" x="${L - 6}" y="${y(v) + 3.5}" text-anchor="end">${Math.round(v).toLocaleString("en-US")}</text>`;
   const n = Math.max(2, Math.floor((W - L - R) / 80));
   const seen = new Set();
   for (let i = 0; i <= n; i++) { const t = t0 + (span * i) / n; const lab = md(t); if (seen.has(lab)) continue; seen.add(lab); s += `<text class="axis" x="${x(t)}" y="${Hh - 6}" text-anchor="${i === 0 ? "start" : i === n ? "end" : "middle"}">${lab}</text>`; }
+  if (band) s += `<rect x="${L}" width="${W - L - R}" y="${y(band[1])}" height="${Math.max(1, y(band[0]) - y(band[1]))}" fill="var(--good)" opacity=".10"/>`;
+  if (gpts.length) {
+    const gs = gpts.slice().sort((a, b) => new Date(a.t) - new Date(b.t));
+    const gl = gs.map((p, i) => `${i ? "L" : "M"}${x(p.t).toFixed(1)} ${y(p.min).toFixed(1)}`).join(" ");
+    s += `<path d="${gl}" fill="none" stroke="var(--muted)" stroke-width="1.8" stroke-dasharray="5 4" stroke-linejoin="round"/>`;
+    s += gs.map((p) => `<circle cx="${x(p.t)}" cy="${y(p.min)}" r="2.5" fill="var(--muted)"/>`).join("");
+  }
   if (target) s += `<line x1="${L}" x2="${W - R}" y1="${y(target)}" y2="${y(target)}" stroke="var(--good)" stroke-dasharray="4 4"/><text class="axis" x="${L + 4}" y="${y(target) - 5}" style="fill:var(--good)">目標 ${Math.round(target).toLocaleString("en-US")}</text>`;
   const line = pts.map((p, i) => `${i ? "L" : "M"}${x(p.t).toFixed(1)} ${y(p.min).toFixed(1)}`).join(" ");
   s += `<path d="${line} L${x(pts[pts.length - 1].t)} ${Hh - B} L${x(pts[0].t)} ${Hh - B} Z" fill="var(--accent-soft)"/><path d="${line}" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>`;
@@ -353,12 +376,13 @@ function drawChart(pts, target) {
   const move = (ev) => {
     const rect = svg.getBoundingClientRect();
     const cx = ((ev.touches ? ev.touches[0].clientX : ev.clientX) - rect.left) / rect.width * W;
-    let b = pts[0]; for (const p of pts) if (Math.abs(x(p.t) - cx) < Math.abs(x(b.t) - cx)) b = p;
+    let b = allPts[0]; for (const p of allPts) if (Math.abs(x(p.t) - cx) < Math.abs(x(b.t) - cx)) b = p;
     const px = x(b.t), py = y(b.min);
     hl.setAttribute("x1", px); hl.setAttribute("x2", px); hl.setAttribute("visibility", "visible");
     hd.setAttribute("cx", px); hd.setAttribute("cy", py); hd.setAttribute("visibility", "visible");
     tip.style.display = "block"; tip.style.left = Math.min(Math.max(px / W * rect.width, 70), rect.width - 70) + "px"; tip.style.top = py / Hh * rect.height + "px";
-    tip.innerHTML = `<b>${fmt(b.min)}</b>　${md(b.t)} ${hm(b.t)}<br>${esc(b.airline)}`;
+    tip.innerHTML = `<b>${fmt(b.min)}</b>　${md(b.t)}${b.g ? "" : " " + hm(b.t)}<br>${esc(b.airline)}`;
+    hd.setAttribute("fill", b.g ? "var(--muted)" : "var(--accent)");
   };
   const leave = () => { tip.style.display = "none"; hl.setAttribute("visibility", "hidden"); hd.setAttribute("visibility", "hidden"); };
   svg.addEventListener("mousemove", move); svg.addEventListener("mouseleave", leave);
@@ -507,6 +531,7 @@ function viewSettings() {
     <h2 class="sec-title">通知管道</h2>
     <section class="list">
       <div class="row"><div style="display:flex;flex-direction:column"><span>ntfy 推播</span><span class="sub" style="font-size:12px">${ch.ntfy ? "主題：" + esc(ch.ntfy_topic_hint) : "在 GitHub Secrets 設定 NTFY_TOPIC"}</span></div><span class="badge ${ch.ntfy ? "b-good" : "b-mute"}">${ch.ntfy ? "已設定" : "未設定"}</span></div>
+      <div class="row"><div style="display:flex;flex-direction:column"><span>Google 價格分析（SerpApi）</span><span class="sub" style="font-size:12px">歷史價格、一般區間，每條航線每天查 1 次</span></div><span class="badge ${ch.serpapi ? "b-good" : "b-mute"}">${ch.serpapi ? "已設定" : "未設定"}</span></div>
       <div class="row"><div style="display:flex;flex-direction:column"><span>Telegram</span><span class="sub" style="font-size:12px">選用，可以和 ntfy 同時開</span></div><span class="badge ${ch.telegram ? "b-good" : "b-mute"}">${ch.telegram ? "已設定" : "未設定"}</span></div>
     </section>
     <div class="help">通知管道的金鑰放在 GitHub 專案的 Settings → Secrets and variables → Actions${repo ? `（<a href="https://github.com/${esc(repo)}/settings/secrets/actions" target="_blank" rel="noopener">直接打開</a>）` : ""}，狀態會在下一次執行後更新。</div>
