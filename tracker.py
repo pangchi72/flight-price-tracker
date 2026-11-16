@@ -21,6 +21,7 @@ import os
 import random
 import re
 import sys
+import time
 import urllib.parse
 import urllib.request
 from datetime import date, datetime, timedelta, timezone
@@ -368,8 +369,17 @@ def run(args) -> int:
 
         prev = next((p["min"] for p in reversed(rh["points"]) if p.get("min")), None)
         try:
-            flights = (fetch_mock(route, currency, prev) if args.mock
-                       else fetch_google_flights(route, currency))
+            flights = []
+            for attempt in range(3):  # Google 偶爾會回傳空結果，等一下再試
+                try:
+                    flights = (fetch_mock(route, currency, prev) if args.mock
+                               else fetch_google_flights(route, currency))
+                except Exception:  # noqa: BLE001
+                    if attempt == 2:
+                        raise
+                if flights:
+                    break
+                time.sleep(8 * (attempt + 1))
             if not flights:
                 raise RuntimeError("沒有抓到任何航班")
         except Exception as e:  # noqa: BLE001
