@@ -5,9 +5,9 @@ on:
     # GitHub 用 UTC 時間；這行 = 每 6 小時一次（台灣時間約 02:17、08:17、14:17、20:17）
     - cron: "17 */6 * * *"
   push:
-    # 在網頁上新增／刪除航線會改到 config.json，改完立刻查一次
+    # 在網頁上新增／刪除航線會改到 config.json，改完立刻查一次；程式更新時也跑一次
     branches: [main]
-    paths: [config.json]
+    paths: [config.json, tracker.py, requirements.txt, .github/workflows/track.yml]
   workflow_dispatch:
     inputs:
       mode:
