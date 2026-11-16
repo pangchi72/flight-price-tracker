@@ -8,6 +8,13 @@
      "airline": "Bangkok Airways / EVA Air",
      "dep": "01-18 08:50",
      "count": 2
+    },
+    {
+     "t": "2026-11-16T16:19+08:00",
+     "min": 4662,
+     "airline": "Thai Lion Air",
+     "dep": "01-18 02:45",
+     "count": 5
     }
    ],
    "name": "曼谷廊曼 → 高雄 1/18",
@@ -31,21 +38,45 @@
    "target_price": null,
    "google_url": "https://www.google.com/travel/flights?q=Flights%20from%20DMK%20to%20KHH%20on%202027-01-18%20one%20way",
    "active": true,
-   "error_streak": 1,
+   "error_streak": 0,
    "last_error": "2026-11-16T16:15+08:00 UnboundLocalError: cannot access local variable 'items' where it is not associated with a value",
    "latest": [
     {
-     "price": 43524,
+     "price": 4662,
+     "airline": "Thai Lion Air",
+     "flight_no": "SL392",
+     "dep": "01-18 02:45",
+     "arr": "01-18 07:15",
+     "stops": 0
+    },
+    {
+     "price": 6102,
+     "airline": "Thai AirAsia",
+     "flight_no": "FD234",
+     "dep": "01-18 02:35",
+     "arr": "01-18 07:00",
+     "stops": 0
+    },
+    {
+     "price": 8627,
+     "airline": "AirAsia",
+     "flight_no": "AK897 AK170",
+     "dep": "01-18 21:30",
+     "arr": "01-19 07:30",
+     "stops": 1
+    },
+    {
+     "price": 43463,
      "airline": "Bangkok Airways / EVA Air",
-     "flight_no": "",
+     "flight_no": "PG451 PG805 BR850",
      "dep": "01-18 08:50",
      "arr": "01-18 21:05",
      "stops": 2
     },
     {
-     "price": 43787,
+     "price": 43725,
      "airline": "Bangkok Airways / Cathay Pacific",
-     "flight_no": "",
+     "flight_no": "PG451 PG805 CX448",
      "dep": "01-18 08:50",
      "arr": "01-18 23:15",
      "stops": 2
@@ -53,7 +84,7 @@
    ]
   }
  },
- "updated": "2026-11-16T16:15+08:00",
+ "updated": "2026-11-16T16:19+08:00",
  "status": {
   "channels": {
    "ntfy": false,
