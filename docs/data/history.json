@@ -1,7 +1,15 @@
 {
  "routes": {
   "dmk-khh-20270118": {
-   "points": [],
+   "points": [
+    {
+     "t": "2026-11-16T16:13+08:00",
+     "min": 43524,
+     "airline": "Bangkok Airways / EVA Air",
+     "dep": "01-18 08:50",
+     "count": 2
+    }
+   ],
    "name": "曼谷廊曼 → 高雄 1/18",
    "from": "DMK",
    "to": "KHH",
@@ -23,11 +31,29 @@
    "target_price": null,
    "google_url": "https://www.google.com/travel/flights?q=Flights%20from%20DMK%20to%20KHH%20on%202027-01-18%20one%20way",
    "active": true,
-   "error_streak": 1,
-   "last_error": "2026-11-16T16:11+08:00 ModuleNotFoundError: No module named 'typing_extensions'"
+   "error_streak": 0,
+   "last_error": "2026-11-16T16:11+08:00 ModuleNotFoundError: No module named 'typing_extensions'",
+   "latest": [
+    {
+     "price": 43524,
+     "airline": "Bangkok Airways / EVA Air",
+     "flight_no": "",
+     "dep": "01-18 08:50",
+     "arr": "01-18 21:05",
+     "stops": 2
+    },
+    {
+     "price": 43787,
+     "airline": "Bangkok Airways / Cathay Pacific",
+     "flight_no": "",
+     "dep": "01-18 08:50",
+     "arr": "01-18 23:15",
+     "stops": 2
+    }
+   ]
   }
  },
- "updated": "2026-11-16T16:11+08:00",
+ "updated": "2026-11-16T16:13+08:00",
  "status": {
   "channels": {
    "ntfy": false,
