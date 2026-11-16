@@ -75,11 +75,11 @@ def _fmt_time(value) -> str:
     d = _get(value, "date")
     t = _get(value, "time")
     if isinstance(t, (tuple, list)) and t:
-        hh, mm = (list(t) + [0, 0])[:2]
+        hh, mm = [int(v or 0) for v in (list(t) + [0, 0])[:2]]
         prefix = ""
         if isinstance(d, (tuple, list)) and len(d) >= 3:
             prefix = f"{int(d[1]):02d}-{int(d[2]):02d} "
-        return f"{prefix}{int(hh):02d}:{int(mm or 0):02d}"
+        return f"{prefix}{hh:02d}:{mm:02d}"
     return str(value)
 
 

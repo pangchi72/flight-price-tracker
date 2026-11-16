@@ -45,7 +45,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           MODE: ${{ github.event.inputs.mode || 'track' }}
-          TRACKER_DEBUG: "1"
+          TRACKER_DEBUG: ""   # 改成 "1" 可以在執行紀錄裡看到 Google 回傳的原始資料
         run: |
           if [ "$MODE" = "test" ]; then
             python tracker.py --test-notify
