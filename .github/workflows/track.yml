@@ -1,0 +1,70 @@
+name: 追蹤機票價格
+
+on:
+  schedule:
+    # GitHub 用 UTC 時間；這行 = 每 6 小時一次（台灣時間約 02:17、08:17、14:17、20:17）
+    - cron: "17 */6 * * *"
+  push:
+    # 在網頁上新增／刪除航線會改到 config.json，改完立刻查一次
+    branches: [main]
+    paths: [config.json]
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "track = 抓價格；test = 只發測試通知"
+        required: false
+        default: track
+        type: choice
+        options: [track, test]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: flight-tracker
+  cancel-in-progress: false
+
+jobs:
+  track:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 安裝套件
+        run: pip install -r requirements.txt
+
+      - name: 抓價格並通知
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          MODE: ${{ github.event.inputs.mode || 'track' }}
+        run: |
+          if [ "$MODE" = "test" ]; then
+            python tracker.py --test-notify
+          else
+            python tracker.py
+          fi
+
+      - name: 存回價格紀錄
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data
+          if git diff --cached --quiet; then
+            echo "沒有新資料"
+            exit 0
+          fi
+          git commit -m "更新機票價格 $(TZ=Asia/Taipei date '+%Y-%m-%d %H:%M')"
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push && exit 0
+            sleep 5
+          done
+          exit 1

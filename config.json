@@ -1,0 +1,29 @@
+{
+  "currency": "TWD",
+  "interval_label": "每 6 小時",
+  "notify_on_error_after": 3,
+  "routes": [
+    {
+      "id": "dmk-khh-20270118",
+      "name": "曼谷廊曼 → 高雄 1/18",
+      "from": "DMK",
+      "to": "KHH",
+      "date": "2027-01-18",
+      "trip": "one-way",
+      "return_date": null,
+      "adults": 1,
+      "seat": "economy",
+      "max_stops": null,
+      "active": true,
+      "alerts": {
+        "notify_new_low": true,
+        "new_low_min_diff": 100,
+        "notify_drop": true,
+        "drop_pct": 3,
+        "drop_abs": 200,
+        "target_price": null,
+        "notify_rise_pct": null
+      }
+    }
+  ]
+}
