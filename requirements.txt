@@ -1,4 +1,4 @@
-# Google Flights 爬蟲（https://github.com/AWeirdDev/flights）
-# 如果哪天抓不到資料，可以改成維護較勤的分支版本：faster-flights（import 名稱相同，程式不用改）
-fast-flights>=3.0
-typing_extensions  # fast-flights 有用到但沒有列在相依套件裡
+# Google Flights 爬蟲：faster-flights 是 fast-flights 的分支，維護較勤，
+# 而且可以要求 Google 依價格排序回傳完整列表（import 名稱一樣是 fast_flights）
+faster-flights>=3.8
+typing_extensions

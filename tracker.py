@@ -83,6 +83,11 @@ def _fmt_time(value) -> str:
     return str(value)
 
 
+def _airport_code(value) -> str:
+    code = _get(value, "code", "iata")
+    return str(code) if code else (str(value) if value else "")
+
+
 def normalize_flight(item) -> dict | None:
     price = _parse_price(_get(item, "price", "total_price"))
     if not price:
@@ -131,13 +136,20 @@ def fetch_google_flights(route: dict, currency: str) -> list[dict]:
         language="en-US",
         currency=currency,
     )
-    result = get_flights(query)
+    try:  # faster-flights 可以要求 Google 依價格排序、回傳最便宜的完整列表
+        from fast_flights import ShoppingOptions
+        result = get_flights(query, shopping=ShoppingOptions(ranking_mode="cheapest", result_sort="price"))
+    except (ImportError, TypeError):
+        result = get_flights(query)
     if os.environ.get("TRACKER_DEBUG"):
-        print(f"[debug] result type={type(result).__name__} len={len(result) if hasattr(result, '__len__') else '?'}")
-        print(f"[debug] result attrs={[a for a in dir(result) if not a.startswith('_')][:40]}")
         seq = result if isinstance(result, (list, tuple)) else _get(result, "flights", default=[]) or []
-        for i, it in enumerate(list(seq)[:4]):
-            print(f"[debug] item{i}: {repr(it)[:1500]}")
+        print(f"[debug] result type={type(result).__name__} count={len(seq)} metadata={repr(_get(result, 'metadata'))[:600]}")
+        for i, it in enumerate(list(seq)[:6]):
+            legs = _get(it, "flights", default=[]) or []
+            print(f"[debug] item{i}: price={_get(it, 'price')} airlines={_get(it, 'airlines')} "
+                  f"route={'-'.join([_airport_code(_get(l, 'from_airport')) for l in legs] + [_airport_code(_get(legs[-1], 'to_airport'))] if legs else [])} "
+                  f"leg0={repr(legs[0])[:300] if legs else ''}")
+    items = _get(result, "flights", default=result)
     # 多段查詢時，有些版本回傳「每段一組結果」的 list，取第一段（價格為整趟總價）
     if isinstance(items, (list, tuple)) and items and _get(items[0], "price") is None \
             and _get(items[0], "flights") is not None:
