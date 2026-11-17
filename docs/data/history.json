@@ -36,6 +36,13 @@
      "airline": "Thai Lion Air",
      "dep": "01-18 02:45",
      "count": 5
+    },
+    {
+     "t": "2026-11-18T04:51+08:00",
+     "min": 4088,
+     "airline": "Thai Lion Air",
+     "dep": "01-18 02:45",
+     "count": 5
     }
    ],
    "name": "曼谷廊曼 → 高雄 1/18",
@@ -63,7 +70,7 @@
    "last_error": "2026-11-16T16:22+08:00 RuntimeError: 沒有抓到任何航班",
    "latest": [
     {
-     "price": 4087,
+     "price": 4088,
      "airline": "Thai Lion Air",
      "flight_no": "SL392",
      "dep": "01-18 02:45",
@@ -71,7 +78,7 @@
      "stops": 0
     },
     {
-     "price": 6238,
+     "price": 6241,
      "airline": "Thai AirAsia",
      "flight_no": "FD234",
      "dep": "01-18 02:35",
@@ -79,7 +86,7 @@
      "stops": 0
     },
     {
-     "price": 7786,
+     "price": 7790,
      "airline": "AirAsia",
      "flight_no": "AK897 AK170",
      "dep": "01-18 21:30",
@@ -87,7 +94,7 @@
      "stops": 1
     },
     {
-     "price": 43603,
+     "price": 43622,
      "airline": "Bangkok Airways / EVA Air",
      "flight_no": "PG451 PG805 BR850",
      "dep": "01-18 08:50",
@@ -95,7 +102,7 @@
      "stops": 2
     },
     {
-     "price": 43866,
+     "price": 43885,
      "airline": "Bangkok Airways / Cathay Pacific",
      "flight_no": "PG451 PG805 CX448",
      "dep": "01-18 08:50",
@@ -104,13 +111,13 @@
     }
    ],
    "insights": {
-    "fetched_at": "2026-11-17T05:58+08:00",
+    "fetched_at": "2026-11-18T04:52+08:00",
     "price_level": "high",
     "typical_price_range": [
      1700,
      3850
     ],
-    "lowest_price": 4079,
+    "lowest_price": 4088,
     "price_history": [
      {
       "t": "2026-09-17T01:00+08:00",
@@ -274,7 +281,7 @@
      },
      {
       "t": "2026-10-27T01:00+08:00",
-      "price": 4044
+      "price": 4047
      },
      {
       "t": "2026-10-28T01:00+08:00",
@@ -326,7 +333,7 @@
      },
      {
       "t": "2026-11-09T01:00+08:00",
-      "price": 4684
+      "price": 4687
      },
      {
       "t": "2026-11-10T01:00+08:00",
@@ -354,17 +361,21 @@
      },
      {
       "t": "2026-11-16T01:00+08:00",
-      "price": 4656
+      "price": 4073
      },
      {
       "t": "2026-11-17T01:00+08:00",
-      "price": 4079
+      "price": 4080
+     },
+     {
+      "t": "2026-11-18T01:00+08:00",
+      "price": 4088
      }
     ]
    }
   }
  },
- "updated": "2026-11-17T15:51+08:00",
+ "updated": "2026-11-18T04:51+08:00",
  "status": {
   "channels": {
    "serpapi": true,
