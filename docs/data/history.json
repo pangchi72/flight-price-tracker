@@ -64,6 +64,13 @@
      "airline": "Thai Lion Air",
      "dep": "01-18 02:45",
      "count": 5
+    },
+    {
+     "t": "2026-11-20T15:08+08:00",
+     "min": 4073,
+     "airline": "Thai Lion Air",
+     "dep": "01-18 02:45",
+     "count": 5
     }
    ],
    "name": "曼谷廊曼 → 高雄 1/18",
@@ -91,7 +98,7 @@
    "last_error": "2026-11-18T15:21+08:00 RuntimeError: 沒有抓到任何航班",
    "latest": [
     {
-     "price": 4079,
+     "price": 4073,
      "airline": "Thai Lion Air",
      "flight_no": "SL392",
      "dep": "01-18 02:45",
@@ -99,7 +106,7 @@
      "stops": 0
     },
     {
-     "price": 5684,
+     "price": 5677,
      "airline": "Thai AirAsia",
      "flight_no": "FD234",
      "dep": "01-18 02:35",
@@ -107,7 +114,7 @@
      "stops": 0
     },
     {
-     "price": 7356,
+     "price": 7346,
      "airline": "AirAsia",
      "flight_no": "AK897 AK170",
      "dep": "01-18 21:30",
@@ -115,7 +122,7 @@
      "stops": 1
     },
     {
-     "price": 43516,
+     "price": 43458,
      "airline": "Bangkok Airways / EVA Air",
      "flight_no": "PG451 PG805 BR850",
      "dep": "01-18 08:50",
@@ -123,7 +130,7 @@
      "stops": 2
     },
     {
-     "price": 43779,
+     "price": 43720,
      "airline": "Bangkok Airways / Cathay Pacific",
      "flight_no": "PG451 PG805 CX448",
      "dep": "01-18 08:50",
@@ -404,7 +411,7 @@
    }
   }
  },
- "updated": "2026-11-20T04:30+08:00",
+ "updated": "2026-11-20T15:08+08:00",
  "status": {
   "channels": {
    "serpapi": true,
