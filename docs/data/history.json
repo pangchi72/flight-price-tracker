@@ -99,6 +99,13 @@
      "airline": "Thai Lion Air",
      "dep": "01-18 02:45",
      "count": 5
+    },
+    {
+     "t": "2026-11-23T03:31+08:00",
+     "min": 4077,
+     "airline": "Thai Lion Air",
+     "dep": "01-18 02:45",
+     "count": 5
     }
    ],
    "name": "曼谷廊曼 → 高雄 1/18",
@@ -134,7 +141,7 @@
      "stops": 0
     },
     {
-     "price": 5682,
+     "price": 5862,
      "airline": "Thai AirAsia",
      "flight_no": "FD234",
      "dep": "01-18 02:35",
@@ -142,7 +149,7 @@
      "stops": 0
     },
     {
-     "price": 8050,
+     "price": 8301,
      "airline": "AirAsia",
      "flight_no": "AK897 AK170",
      "dep": "01-18 21:30",
@@ -167,13 +174,13 @@
     }
    ],
    "insights": {
-    "fetched_at": "2026-11-22T03:10+08:00",
+    "fetched_at": "2026-11-23T03:32+08:00",
     "price_level": "typical",
     "typical_price_range": [
      1700,
      4250
     ],
-    "lowest_price": 4076,
+    "lowest_price": 4077,
     "price_history": [
      {
       "t": "2026-09-17T01:00+08:00",
@@ -442,12 +449,16 @@
      {
       "t": "2026-11-22T01:00+08:00",
       "price": 4076
+     },
+     {
+      "t": "2026-11-23T01:00+08:00",
+      "price": 4077
      }
     ]
    }
   }
  },
- "updated": "2026-11-22T14:41+08:00",
+ "updated": "2026-11-23T03:31+08:00",
  "status": {
   "channels": {
    "serpapi": true,
