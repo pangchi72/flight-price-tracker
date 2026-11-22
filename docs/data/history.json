@@ -92,6 +92,13 @@
      "airline": "Thai Lion Air",
      "dep": "01-18 02:45",
      "count": 5
+    },
+    {
+     "t": "2026-11-22T14:41+08:00",
+     "min": 4077,
+     "airline": "Thai Lion Air",
+     "dep": "01-18 02:45",
+     "count": 5
     }
    ],
    "name": "曼谷廊曼 → 高雄 1/18",
@@ -440,7 +447,7 @@
    }
   }
  },
- "updated": "2026-11-22T03:10+08:00",
+ "updated": "2026-11-22T14:41+08:00",
  "status": {
   "channels": {
    "serpapi": true,
