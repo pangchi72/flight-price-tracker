@@ -134,6 +134,13 @@
      "airline": "Thai Lion Air",
      "dep": "01-18 02:45",
      "count": 5
+    },
+    {
+     "t": "2026-11-26T05:38+08:00",
+     "min": 4676,
+     "airline": "Thai Lion Air",
+     "dep": "01-18 02:45",
+     "count": 5
     }
    ],
    "name": "曼谷廊曼 → 高雄 1/18",
@@ -161,7 +168,7 @@
    "last_error": "2026-11-23T15:30+08:00 RuntimeError: 沒有抓到任何航班",
    "latest": [
     {
-     "price": 4659,
+     "price": 4676,
      "airline": "Thai Lion Air",
      "flight_no": "SL392",
      "dep": "01-18 02:45",
@@ -169,7 +176,7 @@
      "stops": 0
     },
     {
-     "price": 5860,
+     "price": 5882,
      "airline": "Thai AirAsia",
      "flight_no": "FD234",
      "dep": "01-18 02:35",
@@ -177,7 +184,7 @@
      "stops": 0
     },
     {
-     "price": 8219,
+     "price": 8250,
      "airline": "AirAsia",
      "flight_no": "AK897 AK170",
      "dep": "01-18 21:30",
@@ -185,7 +192,7 @@
      "stops": 1
     },
     {
-     "price": 43497,
+     "price": 43662,
      "airline": "Bangkok Airways / EVA Air",
      "flight_no": "PG451 PG805 BR850",
      "dep": "01-18 08:50",
@@ -193,7 +200,7 @@
      "stops": 2
     },
     {
-     "price": 43754,
+     "price": 43919,
      "airline": "Bangkok Airways / Cathay Pacific",
      "flight_no": "PG451 PG805 CX448",
      "dep": "01-18 08:50",
@@ -202,13 +209,13 @@
     }
    ],
    "insights": {
-    "fetched_at": "2026-11-25T06:22+08:00",
+    "fetched_at": "2026-11-26T05:38+08:00",
     "price_level": "high",
     "typical_price_range": [
      1700,
      4300
     ],
-    "lowest_price": 4659,
+    "lowest_price": 4676,
     "price_history": [
      {
       "t": "2026-09-17T01:00+08:00",
@@ -404,7 +411,7 @@
      },
      {
       "t": "2026-11-04T01:00+08:00",
-      "price": 4076
+      "price": 4056
      },
      {
       "t": "2026-11-05T01:00+08:00",
@@ -488,13 +495,17 @@
      },
      {
       "t": "2026-11-25T01:00+08:00",
-      "price": 4659
+      "price": 4078
+     },
+     {
+      "t": "2026-11-26T01:00+08:00",
+      "price": 4676
      }
     ]
    }
   }
  },
- "updated": "2026-11-25T16:25+08:00",
+ "updated": "2026-11-26T05:38+08:00",
  "status": {
   "channels": {
    "serpapi": true,
