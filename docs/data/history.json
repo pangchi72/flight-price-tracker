@@ -164,8 +164,8 @@
    "target_price": null,
    "google_url": "https://www.google.com/travel/flights?q=Flights%20from%20DMK%20to%20KHH%20on%202027-01-18%20one%20way",
    "active": true,
-   "error_streak": 0,
-   "last_error": "2026-11-23T15:30+08:00 RuntimeError: 沒有抓到任何航班",
+   "error_streak": 1,
+   "last_error": "2026-11-26T16:10+08:00 RuntimeError: 沒有抓到任何航班",
    "latest": [
     {
      "price": 4676,
@@ -505,7 +505,7 @@
    }
   }
  },
- "updated": "2026-11-26T05:38+08:00",
+ "updated": "2026-11-26T16:10+08:00",
  "status": {
   "channels": {
    "serpapi": true,
