@@ -141,6 +141,13 @@
      "airline": "Thai Lion Air",
      "dep": "01-18 02:45",
      "count": 5
+    },
+    {
+     "t": "2026-11-27T05:27+08:00",
+     "min": 3953,
+     "airline": "Thai AirAsia",
+     "dep": "01-18 02:35",
+     "count": 5
     }
    ],
    "name": "曼谷廊曼 → 高雄 1/18",
@@ -164,19 +171,11 @@
    "target_price": null,
    "google_url": "https://www.google.com/travel/flights?q=Flights%20from%20DMK%20to%20KHH%20on%202027-01-18%20one%20way",
    "active": true,
-   "error_streak": 1,
+   "error_streak": 0,
    "last_error": "2026-11-26T16:10+08:00 RuntimeError: 沒有抓到任何航班",
    "latest": [
     {
-     "price": 4676,
-     "airline": "Thai Lion Air",
-     "flight_no": "SL392",
-     "dep": "01-18 02:45",
-     "arr": "01-18 07:15",
-     "stops": 0
-    },
-    {
-     "price": 5882,
+     "price": 3953,
      "airline": "Thai AirAsia",
      "flight_no": "FD234",
      "dep": "01-18 02:35",
@@ -184,7 +183,15 @@
      "stops": 0
     },
     {
-     "price": 8250,
+     "price": 4063,
+     "airline": "Thai Lion Air",
+     "flight_no": "SL392",
+     "dep": "01-18 02:45",
+     "arr": "01-18 07:15",
+     "stops": 0
+    },
+    {
+     "price": 7467,
      "airline": "AirAsia",
      "flight_no": "AK897 AK170",
      "dep": "01-18 21:30",
@@ -192,7 +199,7 @@
      "stops": 1
     },
     {
-     "price": 43662,
+     "price": 43363,
      "airline": "Bangkok Airways / EVA Air",
      "flight_no": "PG451 PG805 BR850",
      "dep": "01-18 08:50",
@@ -200,7 +207,7 @@
      "stops": 2
     },
     {
-     "price": 43919,
+     "price": 43618,
      "airline": "Bangkok Airways / Cathay Pacific",
      "flight_no": "PG451 PG805 CX448",
      "dep": "01-18 08:50",
@@ -209,13 +216,13 @@
     }
    ],
    "insights": {
-    "fetched_at": "2026-11-26T05:38+08:00",
-    "price_level": "high",
+    "fetched_at": "2026-11-27T05:27+08:00",
+    "price_level": "typical",
     "typical_price_range": [
      1700,
      4300
     ],
-    "lowest_price": 4676,
+    "lowest_price": 3953,
     "price_history": [
      {
       "t": "2026-09-17T01:00+08:00",
@@ -415,7 +422,7 @@
      },
      {
       "t": "2026-11-05T01:00+08:00",
-      "price": 4101
+      "price": 4069
      },
      {
       "t": "2026-11-06T01:00+08:00",
@@ -495,17 +502,21 @@
      },
      {
       "t": "2026-11-25T01:00+08:00",
-      "price": 4078
+      "price": 4661
      },
      {
       "t": "2026-11-26T01:00+08:00",
-      "price": 4676
+      "price": 4678
+     },
+     {
+      "t": "2026-11-27T01:00+08:00",
+      "price": 3953
      }
     ]
    }
   }
  },
- "updated": "2026-11-26T16:10+08:00",
+ "updated": "2026-11-27T05:27+08:00",
  "status": {
   "channels": {
    "serpapi": true,
